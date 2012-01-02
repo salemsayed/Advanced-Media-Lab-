@@ -91,9 +91,9 @@
 		  	Cheese burger
 		</choice>
 		<choice event="chicken_pane" dtmf="2">
-		 	Chicken Pane
+		 	Chicken Panee
 		</choice>
-		<choice next="hot_dog" dtmf="3">
+		<choice event="hot_dog" dtmf="3">
 			Hot dog
 		</choice>
 	</menu>
