@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<vxml version="2.0">
+	
+	<!-- The Javascript functions to calculate the prices and so on -->
+	<script>
+		function galal(){
+			return "gamed";
+		}
+	</script>
+	
+	<!-- General rules, if no match or no input these will be spoken -->
+	<nomatch>
+		No Match! I'm sorry, I didn't understand you.  Could you please try that again? 
+		<reprompt />
+	</nomatch>
+	<noinput>
+		No Input! I'm sorry, I didn't hear anything.  Could you please try that again? 
+		<reprompt />
+	</noinput>
+	
+	<!-- Events: When user chooses a sandwich, we need to save the sandwich name somewhere -->
+	<catch event="cheese_burger"> 
+		<assign name="document.sandwichName" expr="'cheese burger'"/> 
+		<goto next="#sandwichForm"/> 
+	</catch>
+	
+	<catch event="chicken_pane"> 
+		<assign name="document.sandwichName" expr="'chicken pane'"/> 
+		<goto next="#sandwichForm"/> 
+	</catch>
+	
+	<catch event="hot_dog"> 
+		<assign name="document.sandwichName" expr="'hot dog'"/> 
+		<goto next="#sandwichForm"/> 
+	</catch>
+	
+	<!-- Initially, we ask the user whether he would like to place a customer support ticket or to place a new order -->
+	<menu id="services_menu">
+		<property name="inputmodes" value="dtmf"/>
+		<prompt bargein="false">
+		  Welcome.
+		</prompt>
+		<prompt>
+			<enumerate>
+				<value expr="_prompt"/> press <value expr="_dtmf"/>, 
+			</enumerate>
+		</prompt>
+   
+		<choice next="#food_menu" dtmf="1">
+		  To place a new order
+		</choice>
+		<choice next="#supportForm"	 dtmf="2">
+		  For customer support
+		</choice>
+	</menu>
+	
+	<!-- In case of food ordering, What does the user want? This is like food category -->
+	<menu id="food_menu">
+		<property name="inputmodes" value="dtmf"/>
+		<prompt bargein="false">
+		  Welcome.
+		</prompt>
+		<prompt>
+			<enumerate>
+				To order a <value expr="_prompt"/> press <value expr="_dtmf"/>, 
+			</enumerate>
+		</prompt>
+		<choice next="#sandwiches_menu" dtmf="1">
+		  Sandwich
+		</choice>
+		<choice next="#supportForm"	 dtmf="2">
+		  Salad
+		</choice>
+		<choice next="#supportForm"	 dtmf="3">
+		  side item
+		</choice>
+	</menu>
+	
+	<!-- Menu of available sandwiches -->
+	<menu id="sandwiches_menu">
+		<property name="inputmodes" value="dtmf"/>
+		<prompt bargein="false">
+		  Which sandwich do you want?
+		</prompt>
+		<prompt>
+			<enumerate>
+				To order a <value expr="_prompt"/> press <value expr="_dtmf"/>, 
+			</enumerate>
+		</prompt>
+		<choice event="cheese_burger" dtmf="1">
+		  	Cheese burger
+		</choice>
+		<choice event="chicken_pane" dtmf="2">
+		 	Chicken Pane
+		</choice>
+		<choice next="hot_dog" dtmf="3">
+			Hot dog
+		</choice>
+	</menu>
+  	
+	<!-- The customer is ordering a sandwich, we have to ask whether if he wants additions or stuff to be removed -->
+	<form id="sandwichForm" scope="dialog">
+		<!-- Does the user wants it a combo -->
+		<field name="combo" type="boolean">
+			<prompt>
+				Make it combo
+			</prompt>
+			<filled>
+				<if cond="combo == true">
+					<subdialog name="r_u_sure" src="subdialogs.xml">
+						<param name="confirm_prompt" expr="'Are you sure you want a combo'"/>
+						<filled>
+							<prompt>Ok</prompt>
+						</filled>
+					</subdialog>
+				</if>
+			</filled>
+		</field>
+		
+		<!-- Does the user want any additions to his sandwich? -->
+		<field name="additions" type="boolean">
+			<prompt>Do you want any additions</prompt>
+			<filled>
+				<if cond="additions">
+					
+				</if>
+			</filled>
+		</field>
+		
+		<!-- Does the user want to remove any of the ingredients? -->
+		
+		<!-- Add the entire sandwich order to the array in javascript -->
+		
+	</form>
+  
+</vxml>
