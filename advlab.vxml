@@ -33,7 +33,7 @@
 		<assign name="document.sandwichName" expr="'hot dog'"/> 
 		<goto next="#sandwichForm"/> 
 	</catch>
-	
+
 	<!-- Initially, we ask the user whether he would like to place a customer support ticket or to place a new order -->
 	<menu id="services_menu">
 		<property name="inputmodes" value="dtmf"/>
@@ -47,7 +47,7 @@
 		</prompt>
    
 		<choice next="#food_menu" dtmf="1">
-		  To place a new order
+		  choice one
 		</choice>
 		<choice next="#supportForm"	 dtmf="2">
 		  For customer support
@@ -101,36 +101,38 @@
 	<!-- The customer is ordering a sandwich, we have to ask whether if he wants additions or stuff to be removed -->
 	<form id="sandwichForm" scope="dialog">
 		<!-- Does the user wants it a combo -->
-		<field name="combo" type="boolean">
-			<prompt>
-				Make it combo
+		<field name="confirm" slot="confirm">
+			<grammar type="text/gsl">
+			    <![CDATA[[
+			        [dtmf-1] [yes]    {  <confirm  "yes"> }
+			        [dtmf-2] [no]    {  <confirm  "no">  }
+			    ]]]>
+			  </grammar>
+			<prompt bargein = "false">
+				Do you want to make that a combo ?
 			</prompt>
-			<filled>
-				<if cond="combo == true">
-					<subdialog name="r_u_sure" src="subdialogs.xml">
-						<param name="confirm_prompt" expr="'Are you sure you want a combo'"/>
-						<filled>
-							<prompt>Ok</prompt>
-						</filled>
-					</subdialog>
-				</if>
-			</filled>
 		</field>
 		
+		<filled namelist="confirm" mode="all">
+			<if cond="confirm == 'yes'">
+				<prompt>
+					Combo ya basha
+				</prompt>
+			<elseif cond="confirm == 'no'">
+				<prompt>
+					MESH combo
+				</prompt>
+			</elseif>
+			</if>
+		</filled>
+		
 		<!-- Does the user want any additions to his sandwich? -->
-		<field name="additions" type="boolean">
-			<prompt>Do you want any additions</prompt>
-			<filled>
-				<if cond="additions">
-					
-				</if>
-			</filled>
-		</field>
 		
 		<!-- Does the user want to remove any of the ingredients? -->
 		
 		<!-- Add the entire sandwich order to the array in javascript -->
 		
 	</form>
+	
   
 </vxml>
